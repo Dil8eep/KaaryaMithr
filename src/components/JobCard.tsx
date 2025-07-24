@@ -19,9 +19,11 @@ interface Job {
 interface JobCardProps {
   job: Job;
   language: Language;
+  onCall?: () => void;
+  onMessage?: () => void;
 }
 
-const JobCard: React.FC<JobCardProps> = ({ job, language }) => {
+const JobCard: React.FC<JobCardProps> = ({ job, language, onCall, onMessage }) => {
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
       case 'high': return 'bg-red-100 text-red-800 border-red-200';
@@ -134,11 +136,17 @@ const JobCard: React.FC<JobCardProps> = ({ job, language }) => {
       {/* Action Buttons */}
       <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
         <div className="flex space-x-3">
-          <button className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center space-x-2">
+          <button 
+            onClick={onCall}
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center space-x-2"
+          >
             <Phone className="w-5 h-5" />
             <span>{currentContent.call}</span>
           </button>
-          <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center space-x-2">
+          <button 
+            onClick={onMessage}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center space-x-2"
+          >
             <MessageCircle className="w-5 h-5" />
             <span>{currentContent.message}</span>
           </button>

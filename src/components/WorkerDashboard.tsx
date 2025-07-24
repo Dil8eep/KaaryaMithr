@@ -8,9 +8,17 @@ interface WorkerDashboardProps {
   user: any;
   language: Language;
   onNavigateToProfile: () => void;
+  onNavigateToChat: (contactName: string, contactType: 'worker' | 'employer') => void;
+  onNavigateToEarnings: () => void;
 }
 
-const WorkerDashboard: React.FC<WorkerDashboardProps> = ({ user, language, onNavigateToProfile }) => {
+const WorkerDashboard: React.FC<WorkerDashboardProps> = ({ 
+  user, 
+  language, 
+  onNavigateToProfile, 
+  onNavigateToChat, 
+  onNavigateToEarnings 
+}) => {
   const [isAvailable, setIsAvailable] = useState(true);
   const [activeTab, setActiveTab] = useState('home');
 
@@ -179,15 +187,23 @@ const WorkerDashboard: React.FC<WorkerDashboardProps> = ({ user, language, onNav
       case 'chat':
         return (
           <div className="text-center py-12">
-            <MessageCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">Your messages will appear here</p>
+            <button
+              onClick={() => onNavigateToChat('Demo Employer', 'employer')}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl"
+            >
+              Open Chat Demo
+            </button>
           </div>
         );
       case 'earnings':
         return (
           <div className="text-center py-12">
-            <Wallet className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">Your earnings will appear here</p>
+            <button
+              onClick={onNavigateToEarnings}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl"
+            >
+              View Earnings
+            </button>
           </div>
         );
       case 'profile':

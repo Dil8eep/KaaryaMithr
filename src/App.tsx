@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import SplashScreen from './components/SplashScreen';
 import LanguageSelection from './components/LanguageSelection';
+import PermissionsScreen from './components/PermissionsScreen';
 import RoleSelection from './components/RoleSelection';
 import PhoneLogin from './components/PhoneLogin';
 import WorkerDashboard from './components/WorkerDashboard';
 import EmployerDashboard from './components/EmployerDashboard';
 import WorkerRegistration from './components/WorkerRegistration';
 import Profile from './components/Profile';
+import JobPostForm from './components/JobPostForm';
+import WorkersList from './components/WorkersList';
+import ChatScreen from './components/ChatScreen';
+import EarningsScreen from './components/EarningsScreen';
 
-type Screen = 'splash' | 'language' | 'role' | 'login' | 'worker-registration' | 'worker-dashboard' | 'employer-dashboard' | 'profile';
+type Screen = 'splash' | 'language' | 'permissions' | 'role' | 'login' | 'worker-registration' | 'worker-dashboard' | 'employer-dashboard' | 'profile' | 'job-post' | 'workers-list' | 'chat' | 'earnings';
 type Language = 'te' | 'hi' | 'en';
 type UserRole = 'worker' | 'employer';
 
@@ -20,6 +25,10 @@ function App() {
 
   const handleLanguageSelect = (language: Language) => {
     setSelectedLanguage(language);
+    setCurrentScreen('permissions');
+  };
+
+  const handlePermissionsComplete = () => {
     setCurrentScreen('role');
   };
 
@@ -44,8 +53,29 @@ function App() {
     setCurrentScreen('worker-dashboard');
   };
 
+  const handleJobPost = (jobData: any) => {
+    console.log('Job posted:', jobData);
+    setCurrentScreen('employer-dashboard');
+  };
+
   const handleNavigateToProfile = () => {
     setCurrentScreen('profile');
+  };
+
+  const handleNavigateToJobPost = () => {
+    setCurrentScreen('job-post');
+  };
+
+  const handleNavigateToWorkersList = () => {
+    setCurrentScreen('workers-list');
+  };
+
+  const handleNavigateToChat = (contactName: string, contactType: 'worker' | 'employer') => {
+    setCurrentScreen('chat');
+  };
+
+  const handleNavigateToEarnings = () => {
+    setCurrentScreen('earnings');
   };
 
   const handleBackToDashboard = () => {
@@ -62,6 +92,8 @@ function App() {
         return <SplashScreen onComplete={() => setCurrentScreen('language')} />;
       case 'language':
         return <LanguageSelection onLanguageSelect={handleLanguageSelect} />;
+      case 'permissions':
+        return <PermissionsScreen onComplete={handlePermissionsComplete} language={selectedLanguage} />;
       case 'role':
         return <RoleSelection onRoleSelect={handleRoleSelect} language={selectedLanguage} />;
       case 'login':
@@ -69,11 +101,32 @@ function App() {
       case 'worker-registration':
         return <WorkerRegistration onComplete={handleRegistrationComplete} language={selectedLanguage} />;
       case 'worker-dashboard':
-        return <WorkerDashboard user={user} language={selectedLanguage} onNavigateToProfile={handleNavigateToProfile} />;
+        return <WorkerDashboard 
+          user={user} 
+          language={selectedLanguage} 
+          onNavigateToProfile={handleNavigateToProfile}
+          onNavigateToChat={handleNavigateToChat}
+          onNavigateToEarnings={handleNavigateToEarnings}
+        />;
       case 'employer-dashboard':
-        return <EmployerDashboard user={user} language={selectedLanguage} onNavigateToProfile={handleNavigateToProfile} />;
+        return <EmployerDashboard 
+          user={user} 
+          language={selectedLanguage} 
+          onNavigateToProfile={handleNavigateToProfile}
+          onNavigateToJobPost={handleNavigateToJobPost}
+          onNavigateToWorkersList={handleNavigateToWorkersList}
+          onNavigateToChat={handleNavigateToChat}
+        />;
       case 'profile':
         return <Profile user={user} language={selectedLanguage} userRole={userRole} onBack={handleBackToDashboard} />;
+      case 'job-post':
+        return <JobPostForm onBack={handleBackToDashboard} onSubmit={handleJobPost} language={selectedLanguage} />;
+      case 'workers-list':
+        return <WorkersList onBack={handleBackToDashboard} language={selectedLanguage} />;
+      case 'chat':
+        return <ChatScreen onBack={handleBackToDashboard} language={selectedLanguage} contactName="Demo Contact" contactType="worker" />;
+      case 'earnings':
+        return <EarningsScreen onBack={handleBackToDashboard} language={selectedLanguage} />;
       default:
         return <SplashScreen onComplete={() => setCurrentScreen('language')} />;
     }

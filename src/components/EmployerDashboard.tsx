@@ -7,9 +7,19 @@ interface EmployerDashboardProps {
   user: any;
   language: Language;
   onNavigateToProfile: () => void;
+  onNavigateToJobPost: () => void;
+  onNavigateToWorkersList: () => void;
+  onNavigateToChat: (contactName: string, contactType: 'worker' | 'employer') => void;
 }
 
-const EmployerDashboard: React.FC<EmployerDashboardProps> = ({ user, language, onNavigateToProfile }) => {
+const EmployerDashboard: React.FC<EmployerDashboardProps> = ({ 
+  user, 
+  language, 
+  onNavigateToProfile, 
+  onNavigateToJobPost, 
+  onNavigateToWorkersList, 
+  onNavigateToChat 
+}) => {
   const [activeTab, setActiveTab] = useState('home');
 
   const content = {
@@ -79,7 +89,10 @@ const EmployerDashboard: React.FC<EmployerDashboardProps> = ({ user, language, o
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 gap-4">
-        <button className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+        <button 
+          onClick={onNavigateToJobPost}
+          className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+        >
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
               <Plus className="w-6 h-6" />
@@ -91,7 +104,10 @@ const EmployerDashboard: React.FC<EmployerDashboardProps> = ({ user, language, o
           </div>
         </button>
 
-        <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+        <button 
+          onClick={onNavigateToWorkersList}
+          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+        >
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
               <Search className="w-6 h-6" />
@@ -126,15 +142,23 @@ const EmployerDashboard: React.FC<EmployerDashboardProps> = ({ user, language, o
       case 'workers':
         return (
           <div className="text-center py-12">
-            <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">Available workers will appear here</p>
+            <button
+              onClick={onNavigateToWorkersList}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl"
+            >
+              Browse Workers
+            </button>
           </div>
         );
       case 'chat':
         return (
           <div className="text-center py-12">
-            <MessageCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">Your messages will appear here</p>
+            <button
+              onClick={() => onNavigateToChat('Demo Worker', 'worker')}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl"
+            >
+              Open Chat Demo
+            </button>
           </div>
         );
       case 'jobs':
